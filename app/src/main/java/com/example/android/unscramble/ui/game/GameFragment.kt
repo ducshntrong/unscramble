@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.example.android.unscramble.R
 import com.example.android.unscramble.databinding.GameFragmentBinding
 import android.util.Log
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * Đoạn nơi trò chơi được chơi, chứa logic trò chơi.
@@ -39,12 +40,34 @@ class GameFragment : Fragment() {
         binding = GameFragmentBinding.inflate(inflater, container, false)
         //Lệnh gọi lại onCreateView() sẽ được kích hoạt khi mảnh được tạo lần đầu tiên và cũng được
         //kích hoạt mỗi khi được tạo lại cho mọi sự kiện (chẳng hạn như thay đổi cấu hình).
-        Log.d("GameFragment", "GameFragment created/re-created!")
+        Log.d("GameFragment", "GameFragment created/re-created!")//6
         return binding.root
     }
 
+    //Tạo và hiển thị một alertdialog với điểm số cuối cùng.
+    private fun showFinalScoreDialog() {//8.Hộp thoại
+        //Phương thức requireContext() trả về một Context khác rỗng.
+        MaterialAlertDialogBuilder(requireContext())
+            //đặt tiêu đề trên hộp thoại thông báo, sử dụng tài nguyên chuỗi qua strings.xml
+            .setTitle(getString(R.string.congratulations))
+            //Thiết lập thông báo để hiện điểm cuối cùng, sử dụng phiên bản chỉ có thể đọc của biến điểm (viewModel.score )
+            .setMessage(getString(R.string.you_scored, viewModel.score))
+            //Đảm bảo không huỷ được hộp thoại thông báo khi người dùng nhấn phím quay lại
+            .setCancelable(false)
+            //Thêm hai nút văn bản EXIT (THOÁT) và PLAY AGAIN (CHƠI LẠI) bằng cách sử dụng các phương thức
+            //viết tắt của setNegativeButton(getString(R.string.exit), { _, _ -> exitGame()})
+            .setNegativeButton(getString(R.string.exit)) { _, _ ->
+                exitGame()
+            }
+            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+                restartGame()
+            }
+            //tạo rồi hiện hộp thoại thông báo.
+            .show()
+    }
+
 // Phương thức này sẽ được gọi khi hoạt động và mảnh tương ứng bị huỷ
-    override fun onDetach() {
+    override fun onDetach() {//6
         super.onDetach()
         Log.d("GameFragment", "GameFragment destroyed!")
     }
