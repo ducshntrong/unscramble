@@ -31,7 +31,7 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        viewBinding true
+        dataBinding = true//2.7Sử dụng LiveData với liên kết dữ liệu
     }
 }
 
